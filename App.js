@@ -35,24 +35,34 @@ export default function App() {
     })();
   }, []);
 
-  return (
-    <View style={styles.container}>
-      
-      <MapView
-        style={styles.map}
-        initialRegion={userLocation}
-      >
-        <Marker coordinate={userLocation} pinColor="red" />
-        <Marker
-          coordinate={{
-            latitude: userLocation.latitude + 0.0005,
-            longitude: userLocation.longitude + 0.0005,
-          }}
-          pinColor="green"
+  if (userLocation) {
+    return (
+      <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          initialRegion={userLocation}
+        >
+          <Marker coordinate={userLocation} pinColor="red" />
+          <Marker
+            coordinate={{
+              latitude: userLocation.latitude + 0.0005,
+              longitude: userLocation.longitude + 0.0005,
+            }}
+            pinColor="green"
+          />
+        </MapView>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          initialRegion={userLocation}
         />
-      </MapView>
-    </View>
-  );
+      </View>
+    ); 
+  }
 }
 
 const styles = StyleSheet.create({
