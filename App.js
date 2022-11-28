@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
 import MapView from 'react-native-maps'
+import { Marker } from 'react-native-maps';
 
 export default function App() {
-  
-  const [region, setRegion] = useState({
-    latitude: 51.5079145,
-    longitude: -0.0899163,
+  const tokyoRegion = {
+    latitude: 35.6762,
+    longitude: 139.6503,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
-  });
+  };
 
   return (
     //extra code removed for brevity.
@@ -20,19 +19,19 @@ export default function App() {
       
       <MapView
         style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        //onRegionChangeComplete runs when the user stops dragging MapView
-        onRegionChangeComplete={(region) => setRegion(region)}
-      />
-      {/*Display user's current region:*/}
-      <Text style={styles.text}>Current latitude: {region.latitude}</Text>
-      <Text style={styles.text}>Current longitude: {region.longitude}</Text>
-      <StatusBar style="auto" />
+        initialRegion={tokyoRegion}
+      >
+        {/*Make sure the Marker component is a child of MapView. Otherwise it won't render*/}
+        <Marker coordinate={tokyoRegion} pinColor="red" />
+        {/*marker to a nearby location */}
+        <Marker
+          coordinate={{
+            latitude: 35.67714827145542,
+            longitude: 139.6551462687416,
+          }}
+          pinColor="green"
+        />
+      </MapView>
     </View>
   );
 }
