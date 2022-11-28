@@ -1,33 +1,52 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
+
+import * as Location from 'expo-location';
 
 import MapView from 'react-native-maps'
 import { Marker } from 'react-native-maps';
 
 export default function App() {
-  const tokyoRegion = {
-    latitude: 35.6762,
-    longitude: 139.6503,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
+  const [userLocation, setUserLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        setUserLocation({
+          latitude: 35.6762,
+          longitude: 139.6503,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      location = {
+        latitude: parseFloat(location.coords.latitude),
+        longitude: parseFloat(location.coords.longitude),
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      }
+      setUserLocation(location);
+    })();
+  }, []);
 
   return (
-    //extra code removed for brevity.
-    //create a Hook to store our region data.
     <View style={styles.container}>
       
       <MapView
         style={styles.map}
-        initialRegion={tokyoRegion}
+        initialRegion={userLocation}
       >
-        {/*Make sure the Marker component is a child of MapView. Otherwise it won't render*/}
-        <Marker coordinate={tokyoRegion} pinColor="red" />
-        {/*marker to a nearby location */}
+        <Marker coordinate={userLocation} pinColor="red" />
         <Marker
           coordinate={{
-            latitude: 35.67714827145542,
-            longitude: 139.6551462687416,
+            latitude: userLocation.latitude + 0.0005,
+            longitude: userLocation.longitude + 0.0005,
           }}
           pinColor="green"
         />
