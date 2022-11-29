@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.4.5",
+    "@react-navigation/bottom-tabs": "^6.4.1",
+    "@react-navigation/native": "^6.0.14",
     "expo": "~47.0.8",
     "expo-location": "~15.0.1",
     "expo-status-bar": "~1.4.2",
