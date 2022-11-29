@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 import * as Location from 'expo-location';
 
@@ -9,6 +10,17 @@ import { Marker } from 'react-native-maps';
 export default function App() {
   const [userLocation, setUserLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+
+  // ref
+  const bottomSheetRef = useRef();
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
+
+  // callbacks
+  const handleSheetChanges = useCallback((index) => {
+    console.log('handleSheetChanges', index);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -38,28 +50,39 @@ export default function App() {
   if (userLocation) {
     return (
       <View style={styles.container}>
-        <MapView
-          style={styles.map}
-          initialRegion={userLocation}
-        >
-          <Marker coordinate={userLocation} pinColor="red" />
-          <Marker
-            coordinate={{
-              latitude: userLocation.latitude + 0.0005,
-              longitude: userLocation.longitude + 0.0005,
-            }}
-            pinColor="green"
-          />
-        </MapView>
+      <MapView
+        style={styles.map}
+        initialRegion={userLocation}>
+        <Marker coordinate={userLocation} pinColor="red" />
+        <Marker
+          coordinate={{
+            latitude: userLocation.latitude + 0.0005,
+            longitude: userLocation.longitude + 0.0005,
+          }}
+          pinColor="green"
+        />
+      </MapView>
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={1}
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}>
+        </BottomSheet>
       </View>
     );
   } else {
     return (
       <View style={styles.container}>
-        <MapView
-          style={styles.map}
-          initialRegion={userLocation}
-        />
+      <MapView
+        style={styles.map}
+        initialRegion={userLocation}
+      />
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={1}
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}>
+        </BottomSheet>
       </View>
     ); 
   }
