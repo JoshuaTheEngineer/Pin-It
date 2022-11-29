@@ -1,5 +1,6 @@
 import React from 'react';
 import {SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar} from 'react-native';
+import { FAB } from 'react-native-paper';
 
 const DATA = [
   {
@@ -53,6 +54,11 @@ const Item = ({ name, phone, location }) => (
             data={DATA}
             renderItem={renderItem}
           />
+          <FAB 
+            icon="plus"
+            style={styles.fab}
+            onPress={() => console.log('Presssed')}
+          />
         </SafeAreaView>
       );
   }
@@ -61,6 +67,12 @@ const Item = ({ name, phone, location }) => (
     container: {
       flex: 1,
       marginTop: StatusBar.currentHeight || 0,
+    },
+    fab: {
+      position: 'absolute',
+      margin: 16,
+      right: 0,
+      bottom: 0,
     },
     item: {
       backgroundColor: '#f9c2ff',
