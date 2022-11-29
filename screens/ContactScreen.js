@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect, useRef, useMemo, useCallback} from 'react';
 import {SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar} from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
 import { FAB } from 'react-native-paper';
 
 const DATA = [
@@ -45,6 +46,20 @@ const Item = ({ name, phone, location }) => (
  * @return {Screen}
  */
  export default function ContactScreen() {
+    // ref
+    const bottomSheetRef = useRef();
+    
+    // variables
+    const snapPoints = useMemo(() => ['25%', '75%'], []);
+
+    // callbacks
+    const handleSheetChanges = useCallback((index) => {
+      console.log('handleSheetChanges', index);
+    }, []);
+
+    // methods 
+    const handleOpenPress = () => bottomSheetRef.current.expand();
+
     const renderItem = ({ item }) => (
       <Item name={item.name} phone={item.phone} location={item.location} />
     )
@@ -54,10 +69,16 @@ const Item = ({ name, phone, location }) => (
             data={DATA}
             renderItem={renderItem}
           />
+          <BottomSheet
+            ref={bottomSheetRef}
+            index={-1}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}>
+          </BottomSheet>
           <FAB 
             icon="plus"
             style={styles.fab}
-            onPress={() => console.log('Presssed')}
+            onPress={handleOpenPress}
           />
         </SafeAreaView>
       );
