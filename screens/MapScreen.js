@@ -11,7 +11,7 @@ import {Marker} from 'react-native-maps';
  * The Map Screen
  * @return {Screen}
  */
- export default function MapScreen({ navigation }) {
+ export default function MapScreen() {
     const [userLocation, setUserLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     

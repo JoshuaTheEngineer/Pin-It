@@ -43,7 +43,7 @@ const Item = ({ name, phone, location }) => (
  * The Contact Screen
  * @return {Screen}
  */
- export default function ContactScreen({ navigation }) {
+ export default function ContactScreen() {
     const renderItem = ({ item }) => (
       <Item name={item.name} phone={item.phone} location={item.location} />
     )
