@@ -2,39 +2,7 @@ import React, {useState, useEffect, useRef, useMemo, useCallback} from 'react';
 import {SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button, TextInput, Pressable} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { FAB } from 'react-native-paper';
-
-const DATA = [
-  {
-    id: 0,
-    name: 'Joshua Cadavez',
-    phone: '1-911-911-9911',
-    location: {
-      name: 'Lakewood Ranch, FL',
-      latitude: 27.387918,
-      longitude: -82.43417
-    }
-  },
-  {
-    id: 1,
-    name: 'Jonathan Rameau',
-    phone: '1-222-333-4444',
-    location: {
-      name: 'Sarasota, FL',
-      latitude: 27.336433,
-      longitude: -82.531136
-    }
-  },
-  {
-    id: 2,
-    name: 'Calvin Tran',
-    phone: '1-555-678-9999',
-    location: {
-      name: 'Bradenton, FL',
-      latitude: 27.498928,
-      longitude: -82.574821
-    }
-  },
-]
+import DATA from '../data/contacts.json'
 
 /**
  * The Contact Screen

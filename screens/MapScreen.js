@@ -1,11 +1,13 @@
 import React, {useState, useEffect, useRef, useMemo, useCallback} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 
 import * as Location from 'expo-location';
 
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
+
+import DATA from '../data/contacts.json'
 
 /**
  * The Map Screen
@@ -51,6 +53,29 @@ import {Marker} from 'react-native-maps';
       })();
     }, []);
   
+    const Item = ({ id, name, phone, location }) => (
+      <View style={styles.item}>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.phone}>{phone}</Text>
+        <Text style={styles.location}>{location.name}</Text>
+      </View>
+    );
+
+    const renderItem = ({ item }) => (
+      <Item id={item.id} name={item.name} phone={item.phone} location={item.location} />
+    )
+
+    const ContactMarker = ({id, location}) => (
+      <Marker 
+        key={id}
+        coordinate={{
+          latitude: location.latitude,
+          longitude: location.longitude,
+        }}
+        pinColor="green"
+      />
+    )
+
     if (userLocation) {
       return (
         <View style={styles.container}>
@@ -59,19 +84,20 @@ import {Marker} from 'react-native-maps';
             initialRegion={userLocation}>
             <Text>{errorMsg}</Text>
             <Marker coordinate={userLocation} pinColor="red" />
-            <Marker
-              coordinate={{
-                latitude: userLocation.latitude + 0.0005,
-                longitude: userLocation.longitude + 0.0005,
-              }}
-              pinColor="green"
-            />
+            {
+              DATA.map((contact) => ContactMarker(contact))
+            }
           </MapView>
           <BottomSheet
             ref={bottomSheetRef}
             index={1}
             snapPoints={snapPoints}
             onChange={handleSheetChanges}>
+            <FlatList 
+              data={DATA}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+            />
           </BottomSheet>
         </View>
       );
@@ -99,6 +125,12 @@ import {Marker} from 'react-native-maps';
       flex: 1, // the container will fill the whole screen.
       justifyContent: 'flex-end',
       alignItems: 'center',
+    },
+    item: {
+      backgroundColor: '#f9c2ff',
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
     },
     map: {
       ...StyleSheet.absoluteFillObject,
