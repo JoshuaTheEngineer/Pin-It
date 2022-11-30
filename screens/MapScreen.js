@@ -65,6 +65,17 @@ import DATA from '../data/contacts.json'
       <Item id={item.id} name={item.name} phone={item.phone} location={item.location} />
     )
 
+    const ContactMarker = ({id, location}) => (
+      <Marker 
+        key={id}
+        coordinate={{
+          latitude: location.latitude,
+          longitude: location.longitude,
+        }}
+        pinColor="green"
+      />
+    )
+
     if (userLocation) {
       return (
         <View style={styles.container}>
@@ -73,13 +84,9 @@ import DATA from '../data/contacts.json'
             initialRegion={userLocation}>
             <Text>{errorMsg}</Text>
             <Marker coordinate={userLocation} pinColor="red" />
-            <Marker
-              coordinate={{
-                latitude: userLocation.latitude + 0.0005,
-                longitude: userLocation.longitude + 0.0005,
-              }}
-              pinColor="green"
-            />
+            {
+              DATA.map((contact) => ContactMarker(contact))
+            }
           </MapView>
           <BottomSheet
             ref={bottomSheetRef}
