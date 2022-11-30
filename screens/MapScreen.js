@@ -83,7 +83,11 @@ import DATA from '../data/contacts.json'
             style={styles.map}
             initialRegion={userLocation}>
             <Text>{errorMsg}</Text>
-            <Marker coordinate={userLocation} pinColor="red" />
+            <Marker 
+              coordinate={userLocation} 
+              pinColor="red" 
+              image={require('../assets/chowder.png')}
+            />
             {
               DATA.map((contact) => ContactMarker(contact))
             }
