@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef, useMemo, useCallback} from 'react';
-import {SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar} from 'react-native';
+import {SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { FAB } from 'react-native-paper';
 
@@ -59,6 +59,7 @@ const Item = ({ name, phone, location }) => (
 
     // methods 
     const handleOpenPress = () => bottomSheetRef.current.expand();
+    const handleClosePress = () => bottomSheetRef.current.close();
 
     const renderItem = ({ item }) => (
       <Item name={item.name} phone={item.phone} location={item.location} />
@@ -74,6 +75,14 @@ const Item = ({ name, phone, location }) => (
             index={-1}
             snapPoints={snapPoints}
             onChange={handleSheetChanges}>
+              <View>
+                <Button
+                  onPress={handleClosePress}
+                  title="Close"
+                  color="#841584"
+                  accessibilityLabel="Close with this purple button"
+                />
+              </View>
           </BottomSheet>
           <FAB 
             icon="plus"
