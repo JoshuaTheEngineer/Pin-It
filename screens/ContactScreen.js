@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef, useMemo, useCallback} from 'react';
-import {SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button} from 'react-native';
+import {SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button, TextInput} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { FAB } from 'react-native-paper';
 
@@ -46,6 +46,9 @@ const Item = ({ name, phone, location }) => (
  * @return {Screen}
  */
  export default function ContactScreen() {
+    const [name, onChangeName] = React.useState('');
+    const [number, onChangeNumber] = React.useState('');
+    const [location, onChangeLocation] = React.useState('');
     // ref
     const bottomSheetRef = useRef();
     
@@ -59,7 +62,31 @@ const Item = ({ name, phone, location }) => (
 
     // methods 
     const handleOpenPress = () => bottomSheetRef.current.expand();
-    const handleClosePress = () => bottomSheetRef.current.close();
+    const handleClosePress = () => {
+      onChangeName('')
+      onChangeNumber('')
+      onChangeLocation('')
+      bottomSheetRef.current.close();
+    };
+    const handleCreateContactPress = () => {
+      if(name.trim() == '' || number == '' || location.trim() == '') {
+        console.log("EMPTY!!!!!")
+        return;
+      }
+      DATA.push({
+        name: name,
+        phone: number,
+        location: {
+          name: location,
+          latitude: 27.336433,
+          longitude: -82.531136
+        }
+      })
+      onChangeName('')
+      onChangeNumber('')
+      onChangeLocation('')
+      bottomSheetRef.current.close();
+    };
 
     const renderItem = ({ item }) => (
       <Item name={item.name} phone={item.phone} location={item.location} />
@@ -82,6 +109,31 @@ const Item = ({ name, phone, location }) => (
                   color="#841584"
                   accessibilityLabel="Close with this purple button"
                 />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={name => onChangeName(name)}
+                  value={name}
+                  placeholder="Name"
+                />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={number => onChangeNumber(number)}
+                  value={number}
+                  placeholder="Phone Number"
+                  keyboardType="numeric"
+                />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={location => onChangeLocation(location)}
+                  value={location}
+                  placeholder="Location"
+                />
+                <Button
+                  onPress={handleCreateContactPress}
+                  title="Create Contact"
+                  color="#841584"
+                  accessibilityLabel="Create Contact this purple button"
+                />
               </View>
           </BottomSheet>
           <FAB 
@@ -103,6 +155,12 @@ const Item = ({ name, phone, location }) => (
       margin: 16,
       right: 0,
       bottom: 0,
+    },
+    input: {
+      height: 40,
+      margin: 12,
+      borderWidth: 1,
+      padding: 10,
     },
     item: {
       backgroundColor: '#f9c2ff',
