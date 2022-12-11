@@ -27,9 +27,9 @@ import DATA from '../data/contacts.json'
       onChangeLocation(DATA[id].location.name)
       bottomSheetRef.current.expand();
     };
-    moveToContactPress = () => mapRef.current.animateToRegion({
-      latitude: 27.498928,
-      longitude: -82.574821,
+    moveToContactPress = (location) => mapRef.current.animateToRegion({
+      latitude: parseFloat(location.latitude),
+      longitude: parseFloat(location.longitude),
       latitudeDelta: 0.1,
       longitudeDelta: 0.1
     }, 1000 );
@@ -70,7 +70,7 @@ import DATA from '../data/contacts.json'
     }, []);
   
     const Item = ({ id, name, phone, location }) => (
-      <Pressable style={styles.item} onPress={moveToContactPress}>
+      <Pressable style={styles.item} onPress={() => moveToContactPress(location)}>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.phone}>{phone}</Text>
         <Text style={styles.location}>{location.name}</Text>
