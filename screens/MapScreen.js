@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef, useMemo, useCallback} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 
 import * as Location from 'expo-location';
@@ -17,12 +17,28 @@ import DATA from '../data/contacts.json'
     const [userLocation, setUserLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     
+    /** Map */
+    // ref 
+    const mapRef = useRef();
+    // methods 
+    handleEditContactPress = (id) => {
+      onChangeName(DATA[id].name)
+      onChangeNumber(DATA[id].number)
+      onChangeLocation(DATA[id].location.name)
+      bottomSheetRef.current.expand();
+    };
+    moveToContactPress = () => mapRef.current.animateToRegion({
+      latitude: 27.498928,
+      longitude: -82.574821,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1
+    }, 1000 );
+
+    /** Bottom Sheet */
     // ref
     const bottomSheetRef = useRef();
-  
     // variables
     const snapPoints = useMemo(() => ['25%', '50%'], []);
-  
     // callbacks
     const handleSheetChanges = useCallback((index) => {
       console.log('handleSheetChanges', index);
@@ -54,11 +70,11 @@ import DATA from '../data/contacts.json'
     }, []);
   
     const Item = ({ id, name, phone, location }) => (
-      <View style={styles.item}>
+      <Pressable style={styles.item} onPress={moveToContactPress}>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.phone}>{phone}</Text>
         <Text style={styles.location}>{location.name}</Text>
-      </View>
+      </Pressable>
     );
 
     const renderItem = ({ item }) => (
@@ -80,6 +96,7 @@ import DATA from '../data/contacts.json'
       return (
         <View style={styles.container}>
           <MapView
+            ref={mapRef}
             style={styles.map}
             initialRegion={userLocation}>
             <Text>{errorMsg}</Text>
