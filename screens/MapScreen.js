@@ -111,7 +111,7 @@ import DATA from '../data/contacts.json'
           </MapView>
           <BottomSheet
             ref={bottomSheetRef}
-            index={1}
+            index={0}
             snapPoints={snapPoints}
             onChange={handleSheetChanges}>
             <FlatList 
