@@ -8,6 +8,8 @@ import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
+import ContactMarker from '../components/ContactMarker';
+
 import DATA from '../data/contacts.json'
 
 /**
@@ -112,17 +114,6 @@ import DATA from '../data/contacts.json'
       <Item id={item.id} name={item.name} phone={item.phone} location={item.location} />
     )
 
-    const ContactMarker = ({id, location}) => (
-      <Marker 
-        key={id}
-        coordinate={{
-          latitude: location.latitude,
-          longitude: location.longitude,
-        }}
-        pinColor="green"
-      />
-    )
-
     if (userLocation) {
       return (
         <View style={styles.container}>
@@ -140,7 +131,12 @@ import DATA from '../data/contacts.json'
               image={require('../assets/chowder.png')}
             />
             {
-              DATA.map((contact) => ContactMarker(contact))
+              DATA.map((contact) => 
+                <ContactMarker 
+                  id={contact.id} 
+                  latitude={contact.location.latitude}
+                  longitude={contact.location.longitude}/>
+              )
             }
           </MapView>
           <BottomSheet
