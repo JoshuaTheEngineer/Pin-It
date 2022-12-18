@@ -4,10 +4,10 @@ import BottomSheet from '@gorhom/bottom-sheet';
 
 import * as Location from 'expo-location';
 
-import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 
 import ContactMarker from '../components/ContactMarker';
+import Map from '../components/Map';
 
 import DATA from '../data/contacts.json'
 
@@ -21,7 +21,7 @@ import DATA from '../data/contacts.json'
     
     /** Map */
     // ref 
-    const mapRef = useRef();
+    const refMap = useRef();
     // methods 
     handleEditContactPress = (id) => {
       onChangeName(DATA[id].name)
@@ -29,7 +29,7 @@ import DATA from '../data/contacts.json'
       onChangeLocation(DATA[id].location.name)
       bottomSheetRef.current.expand();
     };
-    moveToContactPress = (location) => mapRef.current.animateToRegion({
+    moveToContactPress = (location) => refMap.current.animateToRegion({
       latitude: parseFloat(location.latitude),
       longitude: parseFloat(location.longitude),
       latitudeDelta: 0.1,
@@ -83,57 +83,39 @@ import DATA from '../data/contacts.json'
       <Item id={item.id} name={item.name} phone={item.phone} location={item.location} />
     )
 
-    if (userLocation) {
-      return (
-        <View style={styles.container}>
-          <MapView
-            ref={mapRef}
-            style={styles.map}
-            initialRegion={userLocation}>
-            <Text>{errorMsg}</Text>
-            <Marker 
-              coordinate={userLocation} 
-              pinColor="red" 
-              image={require('../assets/chowder.png')}
-            />
-            {
-              DATA.map((contact) => 
-                <ContactMarker 
-                  id={contact.id} 
-                  latitude={contact.location.latitude}
-                  longitude={contact.location.longitude}/>
-              )
-            }
-          </MapView>
-          <BottomSheet
-            ref={bottomSheetRef}
-            index={0}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}>
-            <FlatList 
-              data={DATA}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-            />
-          </BottomSheet>
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.container}>
-          <MapView
-            style={styles.map}
-            initialRegion={userLocation}
+    return (
+      <View style={styles.container}>
+        <Map
+          refMap={refMap}
+          userLocation={userLocation}>
+          <Text>{errorMsg}</Text>
+          <Marker 
+            coordinate={userLocation} 
+            pinColor="red" 
+            image={require('../assets/chowder.png')}
           />
-          <BottomSheet
-            ref={bottomSheetRef}
-            index={1}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}>
-          </BottomSheet>
-        </View>
-      );
-    }
+          {
+            DATA.map((contact) => 
+              <ContactMarker 
+                id={contact.id} 
+                latitude={contact.location.latitude}
+                longitude={contact.location.longitude}/>
+            )
+          }
+        </Map>
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={0}
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}>
+          <FlatList 
+            data={DATA}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+          />
+        </BottomSheet>
+      </View>
+    );
   }
   
   const styles = StyleSheet.create({
@@ -148,9 +130,6 @@ import DATA from '../data/contacts.json'
       padding: 20,
       marginVertical: 8,
       marginHorizontal: 16,
-    },
-    map: {
-      ...StyleSheet.absoluteFillObject,
     },
     text: {
       fontSize: 36,
