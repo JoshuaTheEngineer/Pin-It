@@ -6,7 +6,6 @@ import * as Location from 'expo-location';
 
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import ContactMarker from '../components/ContactMarker';
 
@@ -19,36 +18,6 @@ import DATA from '../data/contacts.json'
  export default function MapScreen() {
     const [userLocation, setUserLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
-
-    /** Google Places */
-    const GooglePlacesInput = () => {
-      return (
-        <GooglePlacesAutocomplete
-          placeholder='Search'
-          onPress={ (data, details = null) => {
-            // 'details' is provided when fetchDetails = true
-            console.log(data, details);
-          }}
-          query={{
-            key: '${INSERT GOOGLE API KEY HERE}',
-            language: 'en',
-          }}
-          styles={{
-            textInputContainer: {
-              backgroundColor: 'grey',
-            },
-            textInput: {
-              height: 38,
-              color: '#5d5d5d',
-              fontSize: 16,
-            },
-            predefinedPlacesDescription: {
-              color: '#1faadb',
-            },
-          }}
-        />
-      )
-    }
     
     /** Map */
     // ref 
@@ -117,9 +86,6 @@ import DATA from '../data/contacts.json'
     if (userLocation) {
       return (
         <View style={styles.container}>
-          {/* Got Google Places Input working when API is set
-            <GooglePlacesInput/> 
-          */}
           <MapView
             ref={mapRef}
             style={styles.map}
