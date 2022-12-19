@@ -39,6 +39,7 @@ class SearchLocationBar extends React.Component {
         }}
         styles={{
           textInputContainer: {
+            width: '80%',
             backgroundColor: 'grey',
           },
           textInput: {
