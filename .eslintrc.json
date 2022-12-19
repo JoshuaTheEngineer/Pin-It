@@ -17,6 +17,7 @@
         "react"
     ],
     "rules": {
+        "max-len": [2, { "code": 140, "ignorePattern": "^import .*"}]
     },
     "settings": {
         "react": {
