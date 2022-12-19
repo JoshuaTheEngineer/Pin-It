@@ -30,7 +30,8 @@
     "@babel/core": "^7.12.9",
     "eslint": "^8.28.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-react": "^7.31.11"
+    "eslint-plugin-react": "^7.31.11",
+    "react-native-dotenv": "^3.4.6"
   },
   "private": true
 }

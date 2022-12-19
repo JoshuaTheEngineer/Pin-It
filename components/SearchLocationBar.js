@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
+import {GOOGLE_PLACES_API} from '@env'
+
 /**
  * Uses Google Places API to get location results
  */
@@ -32,7 +34,7 @@ class SearchLocationBar extends React.Component {
         placeholder='Search'
         onPress={ this.props.onPress }
         query={{
-          key: '${INSERT GOOGLE API KEY HERE}',
+          key: `${GOOGLE_PLACES_API}`,
           language: 'en',
         }}
         styles={{
