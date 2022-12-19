@@ -31,6 +31,7 @@ class SearchLocationBar extends React.Component {
   render() {
     return (
       <GooglePlacesAutocomplete
+        fetchDetails={true}
         placeholder='Search'
         onPress={ this.props.onPress }
         query={{
