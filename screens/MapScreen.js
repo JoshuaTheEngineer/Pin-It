@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useRef, useMemo, useCallback} from 'react';
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 
 import * as Location from 'expo-location';
 
 import {Marker} from 'react-native-maps';
 
+import ContactItem from '../components/ContactItem';
 import ContactMarker from '../components/ContactMarker';
 import Map from '../components/Map';
 
@@ -13,7 +14,7 @@ import DATA from '../data/contacts.json';
 
 /**
  * The Map Screen
- * @returns {Screen}
+ * @return {Screen}
  */
 export default function MapScreen() {
   const [userLocation, setUserLocation] = useState(null);
@@ -29,7 +30,7 @@ export default function MapScreen() {
     onChangeLocation(DATA[id].location.name);
     bottomSheetRef.current.expand();
   };
-  moveToContactPress = (location) => refMap.current.animateToRegion({
+  moveToContactPress = (map, location) => map.current.animateToRegion({
     latitude: parseFloat(location.latitude),
     longitude: parseFloat(location.longitude),
     latitudeDelta: 0.1,
@@ -71,18 +72,6 @@ export default function MapScreen() {
     })();
   }, []);
 
-  const Item = ({id, name, phone, location}) => (
-    <Pressable style={styles.item} onPress={() => moveToContactPress(location)}>
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.phone}>{phone}</Text>
-      <Text style={styles.location}>{location.name}</Text>
-    </Pressable>
-  );
-
-  const renderItem = ({item}) => (
-    <Item id={item.id} name={item.name} phone={item.phone} location={item.location} />
-  );
-
   return (
     <View style={styles.container}>
       <Map
@@ -111,7 +100,15 @@ export default function MapScreen() {
         onChange={handleSheetChanges}>
         <FlatList
           data={DATA}
-          renderItem={renderItem}
+          renderItem={({item}) => (
+            <ContactItem
+              id={item.id}
+              name={item.name}
+              phone={item.phone}
+              location={item.location}
+              onPress={() => moveToContactPress(refMap, item.location)}
+            />
+          )}
           keyExtractor={(item) => item.id}
         />
       </BottomSheet>

@@ -1,7 +1,10 @@
 import React, {useRef, useMemo, useCallback} from 'react';
-import {SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, Button, TextInput, Pressable} from 'react-native';
+import {SafeAreaView, View, FlatList, StyleSheet, StatusBar, Button, TextInput} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {FAB} from 'react-native-paper';
+
+import ContactItem from '../components/ContactItem';
+
 import DATA from '../data/contacts.json';
 
 /**
@@ -59,30 +62,18 @@ export default function ContactScreen() {
     bottomSheetRef.current.expand();
   };
 
-  /**
-   *
-   * @param {number} id
-   * @param {string} name
-   * @param {string} phone
-   * @param {object} location
-   * @return {Pressable}
-   */
-  const Item = ({id, name, phone, location}) => (
-    <Pressable onLongPress={() => this.handleEditContactPress(id)} style={styles.item}>
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.phone}>{phone}</Text>
-      <Text style={styles.location}>{location.name}</Text>
-    </Pressable>
-  );
-
-  const renderItem = ({item}) => (
-    <Item id={item.id} name={item.name} phone={item.phone} location={item.location} />
-  );
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={renderItem}
+        renderItem={({item}) => (
+          <ContactItem
+            id={item.id}
+            name={item.name}
+            phone={item.phone}
+            location={item.location}
+          />
+        )}
         keyExtractor={(item) => item.id}
       />
       <BottomSheet
@@ -155,14 +146,5 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-  },
-  name: {
-    fontSize: 32,
-  },
-  phone: {
-    fontSize: 16,
-  },
-  location: {
-    fontSize: 16,
   },
 });
